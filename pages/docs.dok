@@ -1,0 +1,225 @@
+// pages/docs.dok — documentation page
+
+doc {
+  page {
+
+    banner(fill: #1F3864, accent: gold, color: white) {
+      bold(size: 15) { "Documentation" }
+      p(size: 10) { "Everything you need to know about dok." }
+    }
+
+    space(size: 14)
+
+    // Install
+    bold(size: 13, color: #1F3864) { "Installation" }
+    line(stroke: #1F3864)
+    space(size: 6)
+    code { "pip install dok" }
+    space(size: 4)
+    code {
+      """
+      python -m dok report.dok report.docx
+      python -m dok report.dok report.html
+      python -m dok --check report.dok
+      python -m dok --tree  report.dok
+      """
+    }
+
+    space(size: 12)
+
+    // Grammar
+    bold(size: 13, color: #1F3864) { "Syntax — one rule" }
+    line(stroke: #1F3864)
+    space(size: 6)
+
+    code {
+      """
+      name(props) { children }   // node with props and children
+      name { children }          // node with no props
+      "text"                     // single-line text
+      \"\"\"text\"\"\"                  // multiline text (auto-dedent)
+      ->                         // arrow connector (inside row only)
+      ---                        // page break
+      // comment                 // stripped before parsing
+      """
+    }
+
+    space(size: 12)
+
+    // Five layers
+    bold(size: 13, color: #1F3864) { "The five layers" }
+    line(stroke: #1F3864)
+    space(size: 6)
+
+    table(border: true, striped: true) {
+      tr {
+        th { "Layer" }
+        th { "Nodes" }
+        th { "What it controls" }
+      }
+      tr {
+        td { bold { "doc" } }
+        td { italic { "font, size, spacing" } }
+        td { "Document-wide defaults" }
+      }
+      tr {
+        td { bold { "page" } }
+        td { italic { "margin, paper, cols" } }
+        td { "Physical page" }
+      }
+      tr {
+        td { bold { "layout" } }
+        td { italic { "center, right, rtl, row, cols, indent" } }
+        td { "Arrangement" }
+      }
+      tr {
+        td { bold { "style" } }
+        td { italic { "bold, italic, color, size, font" } }
+        td { "Appearance" }
+      }
+      tr {
+        td { bold { "content" } }
+        td { italic { "h1-h4, p, table, ul, box, img..." } }
+        td { "Visible atoms" }
+      }
+    }
+
+    space(size: 12)
+
+    // RTL
+    bold(size: 13, color: #1F3864) { "RTL — Arabic and Hebrew" }
+    line(stroke: #1F3864)
+    space(size: 6)
+
+    p {
+      """
+      One wrapper handles all bidi, direction, and alignment automatically.
+      No manual XML. No element ordering bugs.
+      """
+    }
+
+    code {
+      """
+      rtl {
+        h1 { "التقرير السنوي" }
+        p  { "نما الإيراد بنسبة " bold { "42%" } " هذا العام." }
+      }
+
+      // Mixed direction
+      rtl {
+        p { "نص عربي " ltr { bold { "English" } } " نص عربي" }
+      }
+      """
+    }
+
+    space(size: 12)
+
+    // Visual elements
+    bold(size: 13, color: #1F3864) { "Visual elements" }
+    line(stroke: #1F3864)
+    space(size: 6)
+
+    code {
+      """
+      box(fill: #E8F4FD, stroke: #2196F3, rounded: true) {
+        bold { "Info" }
+        p { "Content inside the box." }
+      }
+
+      callout(fill: #FFF3CD, stroke: #FFC107, tail: top-left) {
+        bold { "Warning: " } "Check your input."
+      }
+
+      banner(fill: #1F3864, accent: gold, color: white) {
+        center { bold(size: 16) { "Company Name" } }
+      }
+
+      p { "Status: " badge(fill: green, color: white) { "ACTIVE" } }
+
+      line(stroke: gray, dashed: true)
+      """
+    }
+
+    space(size: 12)
+
+    // Functions
+    bold(size: 13, color: #1F3864) { "Functions and reuse" }
+    line(stroke: #1F3864)
+    space(size: 6)
+
+    code {
+      """
+      def alert(message) {
+        box(fill: #FFF3CD, stroke: #FFC107, rounded: true) {
+          bold { "Warning: " }
+          message
+        }
+      }
+
+      def card(title) {
+        box(fill: #F5F5F5, rounded: true) {
+          bold(size: 14) { title }
+          children
+        }
+      }
+
+      alert(message: "Check your data.")
+
+      card(title: "Summary") {
+        p { "Content goes here." }
+      }
+      """
+    }
+
+    space(size: 12)
+
+    // Python builder
+    bold(size: 13, color: #1F3864) { "Python builder API" }
+    line(stroke: #1F3864)
+    space(size: 6)
+
+    code {
+      """
+      import dok
+
+      # Parse .dok source
+      node = dok.parse('doc { h1 { "Hello" } }')
+      dok.to_docx(node, "hello.docx")
+      dok.to_html(node, "hello.html")
+
+      # Or build dynamically
+      items = [dok.li(item.name) for item in data]
+      doc   = dok.doc(dok.page(dok.ul(*items)))
+      dok.to_docx(doc, "report.docx")
+      """
+    }
+
+    space(size: 12)
+
+    // Spacing ref
+    bold(size: 13, color: #1F3864) { "Spacing reference" }
+    line(stroke: #1F3864)
+    space(size: 6)
+
+    table(border: true, striped: true) {
+      tr {
+        th { "Value" }
+        th { "Gap after paragraph" }
+        th { "Line height" }
+      }
+      tr { td { "compact" }  td { "0pt" }   td { "1.0×" } }
+      tr { td { "tight" }    td { "4pt" }   td { "1.0×" } }
+      tr { td { "normal" }   td { "8pt" }   td { "1.15×" } }
+      tr { td { "relaxed" }  td { "10pt" }  td { "1.3×" } }
+    }
+
+    space(size: 6)
+
+    p {
+      "Per-paragraph: "
+      code { "p(spacing: compact, line-height: 15) { ... }" }
+    }
+    p { italic(color: gray, size: 9) { "line-height in tenths: 10=single, 15=1.5×, 20=double" } }
+
+  }
+}

@@ -1,0 +1,242 @@
+/* static/style.css — dok site styles */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:   #1F3864;
+  --gold:   #C9A84C;
+  --gray:   #6b7280;
+  --light:  #f8f9fa;
+  --border: #e5e7eb;
+  --text:   #1a1a2e;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+  background: #fff;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+.site-header {
+  background: var(--navy);
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,.25);
+}
+
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: .75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--gold);
+  text-decoration: none;
+  letter-spacing: -.5px;
+}
+
+.logo-sub {
+  font-size: .78rem;
+  color: rgba(255,255,255,.5);
+  margin-right: auto;
+}
+
+nav { display: flex; gap: .25rem; align-items: center; }
+
+nav a {
+  color: rgba(255,255,255,.8);
+  text-decoration: none;
+  padding: .35rem .75rem;
+  border-radius: 4px;
+  font-size: .88rem;
+  transition: background .15s, color .15s;
+}
+
+nav a:hover      { background: rgba(255,255,255,.12); color: white; }
+nav a.nav-active { background: rgba(255,255,255,.18); color: white; font-weight: 600; }
+nav a.nav-github { color: var(--gold); }
+
+/* ── Main ────────────────────────────────────────────────────── */
+.site-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+/* ── Footer ─────────────────────────────────────────────────── */
+.site-footer {
+  background: var(--light);
+  border-top: 1px solid var(--border);
+  padding: 1.25rem;
+}
+
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  justify-content: center;
+  font-size: .85rem;
+  color: var(--gray);
+}
+
+.footer-inner a { color: var(--gray); }
+.footer-inner a:hover { color: var(--navy); }
+
+/* ── dok HTML output styles ──────────────────────────────────── */
+/* These style the HTML that dok generates */
+
+.dok-document { width: 100%; }
+
+.dok-paragraph {
+  margin-bottom: .6rem;
+  line-height: 1.6;
+}
+
+.dok-paragraph.align-center { text-align: center; }
+.dok-paragraph.align-right  { text-align: right; }
+.dok-paragraph.align-justify{ text-align: justify; }
+.dok-paragraph.dir-rtl      { direction: rtl; text-align: right; }
+
+.dok-h1 { font-size: 1.8rem; font-weight: 700; margin: 1.2rem 0 .6rem; color: var(--navy); }
+.dok-h2 { font-size: 1.35rem; font-weight: 700; margin: 1rem 0 .5rem; color: var(--navy); }
+.dok-h3 { font-size: 1.1rem;  font-weight: 700; margin: .8rem 0 .4rem; color: var(--navy); }
+.dok-h4 { font-size: 1rem;    font-weight: 700; margin: .6rem 0 .35rem; }
+
+.dok-code-block {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: .9rem 1.1rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: .85rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  margin: .6rem 0;
+  white-space: pre;
+}
+
+.dok-box {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: .9rem 1.1rem;
+  margin: .6rem 0;
+}
+
+.dok-banner {
+  padding: 1rem 1.5rem;
+  margin: .6rem 0;
+}
+
+.dok-callout {
+  border-left: 4px solid #ffc107;
+  background: #fff3cd;
+  padding: .75rem 1rem;
+  margin: .6rem 0;
+  border-radius: 0 4px 4px 0;
+}
+
+.dok-badge {
+  display: inline-block;
+  padding: .15rem .55rem;
+  border-radius: 3px;
+  font-size: .78rem;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.dok-line {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: .8rem 0;
+}
+
+.dok-line.dashed { border-top-style: dashed; }
+.dok-line.thick  { border-top-width: 3px; }
+
+.dok-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: .6rem 0;
+  font-size: .9rem;
+}
+
+.dok-table th {
+  background: #f0f4f8;
+  font-weight: 700;
+  text-align: left;
+  padding: .5rem .75rem;
+}
+
+.dok-table td {
+  padding: .45rem .75rem;
+}
+
+.dok-table.bordered th,
+.dok-table.bordered td {
+  border: 1px solid #ddd;
+}
+
+.dok-table.striped tr:nth-child(even) td {
+  background: #f9f9f9;
+}
+
+.dok-row {
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
+  margin: .6rem 0;
+}
+
+.dok-row > * { flex: 1; }
+
+.dok-cols {
+  display: flex;
+  gap: 1.5rem;
+  margin: .6rem 0;
+}
+
+.dok-col { flex: 1; }
+
+.dok-spacer { display: block; }
+
+.dok-ul, .dok-ol {
+  padding-left: 1.5rem;
+  margin: .4rem 0 .6rem;
+}
+
+.dok-ul li, .dok-ol li {
+  margin-bottom: .25rem;
+  line-height: 1.5;
+}
+
+.dok-link {
+  color: #0563C1;
+  text-decoration: underline;
+}
+
+.dok-quote {
+  border-left: 3px solid #ccc;
+  padding: .5rem 1rem;
+  margin: .6rem 0;
+  color: #555;
+  font-style: italic;
+}
+
+/* Spacing presets on paragraphs */
+.dok-paragraph.spacing-compact { margin-bottom: 0; }
+.dok-paragraph.spacing-tight   { margin-bottom: .25rem; }
+.dok-paragraph.spacing-normal  { margin-bottom: .6rem; }
+.dok-paragraph.spacing-relaxed { margin-bottom: 1rem; }

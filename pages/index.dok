@@ -1,0 +1,145 @@
+// pages/index.dok — landing page
+
+doc {
+  page {
+
+    // Hero
+    banner(fill: #1F3864, accent: gold, color: white) {
+      center {
+        bold(size: 22) { "dok" }
+        p(size: 13) { "Document markup language for AI and humans." }
+        p(size: 11) { "Compiles to DOCX and HTML. Zero dependencies." }
+      }
+    }
+
+    space(size: 16)
+
+    // Install
+    center {
+      box(fill: #1a1a2e, stroke: #1a1a2e, rounded: true, width: 60) {
+        center { color(value: #70d6ff, size: 12) { "pip install dok" } }
+      }
+    }
+
+    space(size: 20)
+
+    // Three value props
+    row {
+      box(fill: #EBF5FB, stroke: #2E86C1, rounded: true) {
+        center { bold(color: #1F3864, size: 12) { "AI-Ready" } }
+        p {
+          """
+          Complete grammar fits in a system prompt.
+          One way to write everything — no ambiguity
+          for models to hallucinate into.
+          """
+        }
+      }
+      box(fill: #EAFAF1, stroke: #1E8449, rounded: true) {
+        center { bold(color: #1E8449, size: 12) { "RTL Native" } }
+        p {
+          """
+          Arabic and Hebrew work out of the box.
+          One wrapper node handles all OOXML bidi
+          ordering automatically.
+          """
+        }
+      }
+      box(fill: #FEF9E7, stroke: #D4AC0D, rounded: true) {
+        center { bold(color: #9A7D0A, size: 12) { "Zero Deps" } }
+        p {
+          """
+          Pure Python stdlib. pip install dok
+          installs exactly one thing. No conflicts,
+          no transitive packages.
+          """
+        }
+      }
+    }
+
+    space(size: 20)
+
+    // Quick example
+    bold(size: 13, color: #1F3864) { "Write this" }
+    line(stroke: #1F3864)
+    space(size: 6)
+
+    code {
+      """
+      doc {
+        page {
+          banner(fill: #1F3864, color: white) {
+            center { bold(size: 16) { "Invoice" } }
+          }
+          table(border: true, striped: true) {
+            tr { th { "Item" }       th { "Price" } }
+            tr { td { "Consulting" } td { "$900"  } }
+            tr { td { "Design" }     td { "$400"  } }
+          }
+          right { bold(size: 13) { "Total: $1,300" } }
+        }
+      }
+      """
+    }
+
+    space(size: 12)
+
+    bold(size: 13, color: #1F3864) { "Get this" }
+    line(stroke: #1F3864)
+    space(size: 6)
+
+    row {
+      box(fill: #F4F6F7, stroke: #AAB7B8, rounded: true) {
+        center { bold(color: #1F3864) { "DOCX" } }
+        center { italic(color: gray, size: 9) { "python -m dok file.dok file.docx" } }
+      }
+      box(fill: #F4F6F7, stroke: #AAB7B8, rounded: true) {
+        center { bold(color: #1F3864) { "HTML" } }
+        center { italic(color: gray, size: 9) { "python -m dok file.dok file.html" } }
+      }
+      box(fill: #F4F6F7, stroke: #AAB7B8, rounded: true) {
+        center { bold(color: #1F3864) { "PDF" } }
+        center { italic(color: gray, size: 9) { "via LibreOffice" } }
+      }
+    }
+
+    space(size: 20)
+
+    // What it replaces
+    bold(size: 13, color: #1F3864) { "Replaces paid tools" }
+    line(stroke: #1F3864)
+    space(size: 6)
+
+    table(border: true, striped: true) {
+      tr {
+        th { "Tool" }
+        th { "Price" }
+        th { "dok equivalent" }
+      }
+      tr {
+        td { "DocRaptor" }
+        td { bold(color: red) { "$15–200/month" } }
+        td { bold(color: green) { "dok.to_pdf()" } }
+      }
+      tr {
+        td { "Carbone" }
+        td { bold(color: red) { "$49–299/month" } }
+        td { bold(color: green) { "dok.to_docx()" } }
+      }
+      tr {
+        td { "Docmosis" }
+        td { bold(color: red) { "$150+/month" } }
+        td { bold(color: green) { "all of the above" } }
+      }
+    }
+
+    space(size: 8)
+
+    center {
+      bold(size: 12, color: green) {
+        "dok — open source — $0/month — runs anywhere"
+      }
+    }
+
+  }
+}

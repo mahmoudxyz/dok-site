@@ -1,0 +1,201 @@
+// pages/examples.dok — examples gallery
+
+doc {
+  page {
+
+    banner(fill: #1F3864, accent: gold, color: white) {
+      bold(size: 15) { "Examples" }
+      p(size: 10) { "Copy any example into the Playground to try it live." }
+    }
+
+    space(size: 14)
+
+    // Example 1 — Invoice
+    bold(size: 13, color: #1F3864) { "1. Invoice" }
+    line(stroke: #1F3864)
+    space(size: 6)
+
+    code {
+      """
+      doc(font: Calibri, size: 11) {
+        page(margin: normal) {
+          banner(fill: #1F3864, accent: gold, color: white) {
+            center { bold(size: 16) { "INVOICE" } }
+          }
+          space(size: 12)
+          table(border: true, striped: true) {
+            tr { th { "Item" }       th { "Qty" } th { "Price" }  }
+            tr { td { "Consulting" } td { "3" }   td { "$900" }   }
+            tr { td { "Design" }     td { "1" }   td { "$400" }   }
+          }
+          space(size: 8)
+          right { bold(size: 13) { "Total: $1,300" } }
+        }
+      }
+      """
+    }
+
+    space(size: 16)
+
+    // Example 2 — Arabic RTL
+    bold(size: 13, color: #1F3864) { "2. Arabic RTL Document" }
+    line(stroke: #1F3864)
+    space(size: 6)
+
+    code {
+      """
+      doc(font: Calibri, size: 12) {
+        page(margin: normal) {
+          banner(fill: #1F3864, accent: gold, color: white) {
+            rtl {
+              center { bold(size: 16) { "التقرير السنوي" } }
+            }
+          }
+          space(size: 12)
+          rtl {
+            h2 { "ملخص تنفيذي" }
+            p {
+              \"\"\"
+              نما إيراد الشركة بنسبة كبيرة خلال العام الماضي،
+              مما يعكس قوة الأداء في جميع القطاعات.
+              \"\"\"
+            }
+            p {
+              "الوضع الحالي: "
+              badge(fill: green, color: white) { "ممتاز" }
+            }
+          }
+        }
+      }
+      """
+    }
+
+    space(size: 16)
+
+    // Example 3 — Report with metrics
+    bold(size: 13, color: #1F3864) { "3. Report with Metrics" }
+    line(stroke: #1F3864)
+    space(size: 6)
+
+    code {
+      """
+      def metric(label, value, color) {
+        box(fill: #F8F9FA, rounded: true) {
+          center {
+            color(value: gray) { label }
+            bold(size: 20, color: color) { value }
+          }
+        }
+      }
+
+      doc(font: Calibri, size: 11) {
+        page {
+          banner(fill: #1F3864, accent: gold, color: white) {
+            center { bold(size: 16) { "Q4 Report" } }
+          }
+          space(size: 12)
+          row {
+            metric(label: "Revenue",   value: "$4.2M", color: green)
+            metric(label: "Customers", value: "1,840", color: green)
+            metric(label: "Churn",     value: "2.1%",  color: red)
+          }
+          space(size: 12)
+          h2 { "Key Highlights" }
+          ul {
+            li { "Enterprise contracts drove EMEA growth" }
+            li { "CAC decreased by " bold { "15%" } }
+            li { "New product reached " bold { "$400K" } " revenue" }
+          }
+        }
+      }
+      """
+    }
+
+    space(size: 16)
+
+    // Example 4 — Two column paper
+    bold(size: 13, color: #1F3864) { "4. Two-Column Academic Paper" }
+    line(stroke: #1F3864)
+    space(size: 6)
+
+    code {
+      """
+      doc(font: "Times New Roman", size: 10, spacing: tight) {
+
+        // Full-width title
+        page(margin: normal, cols: 1) {
+          center {
+            bold(size: 14) { "Paper Title" }
+            space(size: 6)
+            italic(color: gray) { "Author Name · Institution · 2026" }
+          }
+          space(size: 10)
+          indent(level: 1) {
+            bold { "Abstract" }
+            p { \"\"\"
+              Abstract text goes here. It spans the full
+              width of the page before the two-column body.
+            \"\"\" }
+          }
+        }
+
+        // Two-column body
+        page(margin: normal, cols: 2) {
+          h2 { "1. Introduction" }
+          p { \"\"\"
+            Body text flows automatically from the bottom
+            of the left column to the top of the right.
+          \"\"\" }
+          h2 { "2. Method" }
+          p { "Method description here." }
+        }
+      }
+      """
+    }
+
+    space(size: 16)
+
+    // Example 5 — Flowchart
+    bold(size: 13, color: #1F3864) { "5. Process Flow" }
+    line(stroke: #1F3864)
+    space(size: 6)
+
+    code {
+      """
+      doc {
+        page {
+          h2 { "Document Generation Pipeline" }
+          space(size: 8)
+          row {
+            box(fill: #2E74B5, color: white, rounded: true) {
+              center { bold { "Prompt" } }
+            }
+            ->
+            box(fill: #70AD47, color: white, rounded: true) {
+              center { bold { "AI" } }
+            }
+            ->
+            box(fill: #ED7D31, color: white, rounded: true) {
+              center { bold { ".dok" } }
+            }
+            ->
+            box(fill: #1F3864, color: white, rounded: true) {
+              center { bold { "DOCX / HTML" } }
+            }
+          }
+        }
+      }
+      """
+    }
+
+    space(size: 16)
+
+    center {
+      callout(fill: #EBF5FB, stroke: #2E86C1, tail: top-left) {
+        bold { "Try any example live → " }
+        italic { "Copy the code and paste it in the Playground." }
+      }
+    }
+
+  }
+}
