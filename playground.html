@@ -131,7 +131,7 @@
       status.className = "status";
 
       try {
-        const res  = await fetch("/preview", {
+        const res  = await fetch("/api/preview", {
           method:  "POST",
           headers: { "Content-Type": "text/plain" },
           body:    source,

@@ -1,12 +1,12 @@
 """
-dok-site/server.py — pure Python stdlib, no dependencies beyond dok.
+dok-site/server.py
 
-Startup: compiles all pages/*.dok → HTML strings (once, in memory)
-Runtime: serves those strings + static files + playground
+Startup: compiles pages/*.dok + pages/examples/*.dok → HTML (once, in memory)
+Runtime: serves compiled HTML + static files + playground live preview
 
 Usage:
-  python server.py          # http://localhost:8000
-  python server.py 9000     # custom port
+  python server.py        # http://localhost:8000
+  python server.py 9000
 """
 
 import sys
@@ -20,6 +20,7 @@ from urllib.parse import urlparse
 HERE       = Path(__file__).parent
 STATIC_DIR = HERE / "static"
 PLAYGROUND = HERE / "playground.html"
+EXAMPLES_DIR = HERE / "pages" / "examples"
 
 # ── Compile one .dok file → HTML string via CLI ───────────────
 def dok_to_html(dok_path: Path) -> str:
@@ -34,6 +35,7 @@ def dok_to_html(dok_path: Path) -> str:
     html = out.read_text(encoding="utf-8")
     out.unlink(missing_ok=True)
     return html
+
 
 # ── Base HTML shell ───────────────────────────────────────────
 def wrap(body: str, title: str = "dok", active: str = "") -> str:
@@ -74,24 +76,88 @@ def wrap(body: str, title: str = "dok", active: str = "") -> str:
 </body>
 </html>"""
 
-# ── Pre-compile all pages at startup ─────────────────────────
-PAGES = {
-    "/":         ("pages/index.dok",    "Home",     "home"),
-    "/docs":     ("pages/docs.dok",     "Docs",     "docs"),
-    "/examples": ("pages/examples.dok", "Examples", "examples"),
+
+# ── Build examples page from individual .dok files ────────────
+EXAMPLE_META = [
+    ("invoice.dok", "Invoice"),
+    ("arabic.dok",  "Arabic RTL Document"),
+    ("metrics.dok", "Report with Metrics"),
+    ("flow.dok",    "Process Flow"),
+]
+
+def build_examples_page() -> bytes:
+    parts = []
+    parts.append("""
+      <div class="examples-header">
+        <h1>Examples</h1>
+        <p>Each example below is compiled from a <code>.dok</code> file — exactly what you get in DOCX and HTML output.</p>
+      </div>
+    """)
+
+    for i, (filename, title) in enumerate(EXAMPLE_META, 1):
+        path = EXAMPLES_DIR / filename
+        if not path.exists():
+            continue
+        source = path.read_text(encoding="utf-8")
+        try:
+            rendered = dok_to_html(path)
+            print(f"  ✓  examples/{filename}")
+        except RuntimeError as e:
+            rendered = f"<pre style='color:red'>{e}</pre>"
+            print(f"  ✗  examples/{filename}: {e}")
+
+        # Escape source for display in textarea
+        escaped = source.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+        parts.append(f"""
+        <div class="example-block">
+          <div class="example-header">
+            <span class="example-num">{i}</span>
+            <h2>{title}</h2>
+            <a class="try-btn" href="/playground?source={filename}">Try in Playground →</a>
+          </div>
+          <div class="example-cols">
+            <div class="example-source">
+              <div class="pane-label">source  <span>.dok</span></div>
+              <pre class="source-pre"><code>{escaped}</code></pre>
+            </div>
+            <div class="example-preview">
+              <div class="pane-label">output  <span>rendered HTML</span></div>
+              <div class="rendered-output">
+                {rendered}
+              </div>
+            </div>
+          </div>
+        </div>
+        """)
+
+    body = "\n".join(parts)
+    full = wrap(body, title="Examples", active="examples")
+    return full.encode()
+
+
+# ── Pre-compile static pages at startup ───────────────────────
+STATIC_PAGES = {
+    "/":     ("pages/index.dok", "Home",  "home"),
+    "/docs": ("pages/docs.dok",  "Docs",  "docs"),
 }
 
-print("  compiling pages...")
+print("\n  compiling pages...")
 COMPILED: dict[str, bytes] = {}
-for route, (rel, title, active) in PAGES.items():
+
+for route, (rel, title, active) in STATIC_PAGES.items():
     path = HERE / rel
     try:
         html = wrap(dok_to_html(path), title=title, active=active)
         COMPILED[route] = html.encode()
         print(f"  ✓  {rel}")
     except Exception as e:
-        print(f"  ✗  {rel}: {e}")
         COMPILED[route] = f"<pre style='color:red'>{e}</pre>".encode()
+        print(f"  ✗  {rel}: {e}")
+
+print("  compiling examples...")
+COMPILED["/examples"] = build_examples_page()
+
 
 # ── MIME types ────────────────────────────────────────────────
 MIMES = {
@@ -102,22 +168,25 @@ MIMES = {
     ".svg": "image/svg+xml",
 }
 
-# ── Handler ───────────────────────────────────────────────────
+
+# ── Request handler ───────────────────────────────────────────
 class Handler(BaseHTTPRequestHandler):
 
     def log_message(self, fmt, *args):
         print(f"  {self.address_string()}  {fmt % args}")
 
-    # GET ── compiled pages, static files, playground ──────────
     def do_GET(self):
         path = urlparse(self.path).path.rstrip("/") or "/"
 
+        # Pre-compiled pages
         if path in COMPILED:
             return self._send(200, "text/html", COMPILED[path])
 
+        # Playground
         if path == "/playground":
             return self._send(200, "text/html", PLAYGROUND.read_bytes())
 
+        # Static files
         if path.startswith("/static/"):
             f = HERE / path.lstrip("/")
             if f.exists():
@@ -125,9 +194,9 @@ class Handler(BaseHTTPRequestHandler):
 
         self._send(404, "text/plain", b"Not found")
 
-    # POST /preview ── playground live compile ─────────────────
     def do_POST(self):
-        if self.path != "/preview":
+        """Playground live preview — raw dok source in, raw HTML out."""
+        if self.path not in ("/preview", "/api/preview"):
             return self._send(404, "text/plain", b"Not found")
 
         length = int(self.headers.get("Content-Length", 0))
@@ -145,13 +214,13 @@ class Handler(BaseHTTPRequestHandler):
         except RuntimeError as e:
             self._send(400, "text/plain", str(e).encode())
 
-    # ── helper ────────────────────────────────────────────────
     def _send(self, status: int, mime: str, body: bytes):
         self.send_response(status)
         self.send_header("Content-Type", f"{mime}; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
+
 
 # ── Run ───────────────────────────────────────────────────────
 if __name__ == "__main__":
